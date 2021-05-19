@@ -29,6 +29,76 @@ import csv
 El controlador se encarga de mediar entre la vista y el modelo.
 """
 
+
+"""
+El controlador se encarga de mediar entre la vista y el modelo.
+Existen algunas operaciones en las que se necesita invocar
+el modelo varias veces o integrar varias de las respuestas
+del modelo en una sola respuesta.  Esta responsabilidad
+recae sobre el controlador.
+"""
+
+# ___________________________________________________
+#  Inicializacion del catalogo
+# ___________________________________________________
+
+
+def init():
+    """
+    Llama la funcion de inicializacion  del modelo.
+    """
+    # analyzer es utilizado para interactuar con el modelo
+    analyzer = model.newAnalyzer()
+    return analyzer
+
+
+# ___________________________________________________
+#  Funciones para la carga de datos y almacenamiento
+#  de datos en los modelos
+# ___________________________________________________
+
+
+def loadServices(analyzer):
+    """
+    Carga los datos de los archivos CSV en el modelo.
+    Se crea un arco entre cada par de estaciones que
+    pertenecen al mismo servicio y van en el mismo sentido.
+
+    addRouteConnection crea conexiones entre diferentes rutas
+    servidas en una misma estación.
+    """
+
+    
+
+    servicefile='connections.csv'
+    servicesfile = cf.data_dir + servicefile
+    input_file = csv.DictReader(open(servicesfile, encoding="utf-8"),
+                                delimiter=",")
+    for line in input_file:
+        model.addLanding(analyzer,line)
+    servicefile='landing_points.csv'
+    servicesfile = cf.data_dir + servicefile
+    input_file = csv.DictReader(open(servicesfile, encoding="utf-8"),
+                                delimiter=",")
+    lastservice = None
+    for line in input_file:
+        model.addInfo(analyzer,line)
+
+    servicefile='countries.csv'
+    servicesfile = cf.data_dir + servicefile
+    input_file = csv.DictReader(open(servicesfile, encoding="utf-8"),
+                                delimiter=",")
+    lastservice = None
+    for line in input_file:
+        model.addCountry(analyzer,line)
+    return analyzer
+
+
+# ___________________________________________________
+#  Funciones para consultas
+# ___________________________________________________
+
+
 # Inicialización del Catálogo de libros
 
 # Funciones para la carga de datos

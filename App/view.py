@@ -25,6 +25,8 @@ import sys
 import controller
 from DISClib.ADT import list as lt
 assert cf
+from DISClib.DataStructures import graphstructure as gr
+from DISClib.ADT import map as mp
 
 
 """
@@ -49,6 +51,18 @@ while True:
     inputs = input('Seleccione una opción para continuar\n')
     if int(inputs[0]) == 1:
         print("Cargando información de los archivos ....")
+        analyzer=controller.init()
+        analyzer=controller.loadServices(analyzer)
+        print("El total de landing points:"+ str(gr.numVertices(analyzer['connections'])))
+        print("El total de conexiones entre landing points:" + str(gr.numEdges(analyzer['connections'])))
+        print("El total de países:"+ str(mp.size(analyzer['countries'])))
+        #for i in range (0,1): 
+        #    for a in (analyzer['landingpoints']['table']['elements']):
+        #        b=a
+                
+        #print("La información del primer landing point cargado: identificador:{0}, nombre:{1}, latitud:{2}, longitud:{3}".format(b[landing_point_id],b[id],b[name],b[latitude],b[longitude]))
+#Mostrar la información de población y número usuarios de Internet del último país cargado.
+
 
     elif int(inputs[0]) == 2:
         pass
