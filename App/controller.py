@@ -91,6 +91,7 @@ def loadServices(analyzer):
     lastservice = None
     for line in input_file:
         model.addCountry(analyzer,line)
+    model.addConnection(analyzer)
     return analyzer
 
 

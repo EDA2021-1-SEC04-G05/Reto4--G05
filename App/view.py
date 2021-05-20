@@ -38,8 +38,15 @@ operación solicitada
 
 def printMenu():
     print("Bienvenido")
-    print("1- Cargar información en el catálogo")
-    print("2- ")
+    print("0- Cargar información en el catálogo")
+    print("1- REQ. 1: Identificar los clústeres de comunicación")
+    print("2- Identificar los puntos de conexión críticos de la red")
+    print("3- La ruta de menor distancia")
+    print("4- Identificar la Infraestructura Crítica de la Red ")
+    print("5-Análisis de fallas ")
+    print("6- Los mejores canales para transmitir")
+    print("7- La mejor ruta para comunicarme")
+    print("8- Graficar los Grafos")
 
 catalog = None
 
@@ -49,7 +56,7 @@ Menu principal
 while True:
     printMenu()
     inputs = input('Seleccione una opción para continuar\n')
-    if int(inputs[0]) == 1:
+    if int(inputs[0]) == 0:
         print("Cargando información de los archivos ....")
         analyzer=controller.init()
         analyzer=controller.loadServices(analyzer)
@@ -64,7 +71,7 @@ while True:
 #Mostrar la información de población y número usuarios de Internet del último país cargado.
 
 
-    elif int(inputs[0]) == 2:
+    elif int(inputs[0]) == 1:
         pass
 
     else:

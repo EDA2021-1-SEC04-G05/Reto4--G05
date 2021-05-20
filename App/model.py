@@ -32,6 +32,8 @@ from DISClib.DataStructures import mapentry as me
 from DISClib.Algorithms.Sorting import shellsort as sa
 from DISClib.DataStructures import graphstructure as gr
 assert cf
+from DISClib.DataStructures import listiterator as lit
+import haversine as hs
 
 """
 Se define la estructura de un catálogo de videos. El catálogo tendrá dos listas, una para los videos, otra para las categorias de
@@ -68,16 +70,24 @@ def newAnalyzer():
 # Funciones para agregar informacion al catalogo
 def addLanding(analyzer,line):
     origin=line['\ufefforigin']
+    cable_id=line['cable_id']
+    lableo=origin+"-"+cable_id
     destination=line['destination']
-    length=line['cable_length'].strip(" km")
-    addPoint(analyzer,origin)
-    addPoint(analyzer,destination)
-    addLine(analyzer,length,origin,destination)
+    labled=destination+"-"+cable_id
+    length=line['cable_length']
 
-def addPoint(analyzer,origin):
-    exists=gr.containsVertex(analyzer['connections'], origin)
+    if length!='n.a.':
+        length=length.strip(" km").replace(",", "")
+        length=float(length)
+    addPoint(analyzer,lableo)
+    addPoint(analyzer,labled)
+    addLine(analyzer,length,lableo,labled)
+
+
+def addPoint(analyzer,lable):
+    exists=gr.containsVertex(analyzer['connections'], lable)
     if not exists: 
-        gr.insertVertex(analyzer['connections'], origin)
+        gr.insertVertex(analyzer['connections'], lable)
 def addLine(analyzer,length,origin,destination):
     arco=gr.getEdge(analyzer['connections'],origin,destination)
     if arco == None: 
@@ -88,6 +98,26 @@ def addInfo(analyzer,line):
 
 def addCountry(analyzer,line):
     mp.put(analyzer['countries'],line['CountryName'],line)
+
+def addConnection(analyzer):
+    vertices=gr.vertices(analyzer['connections'])
+    a=lit.newIterator(vertices)
+  
+    while lit.hasNext(a):
+        c=lit.next(a)
+        b=lit.newIterator(vertices)
+        while lit.hasNext(b):
+            d=lit.next(b)
+            if c!=d: 
+                h=c.split("-")
+                j=d.split("-")
+                if h[0]==j[0]:
+                    addLine(analyzer,100,c,d)
+            
+
+
+
+
 
   
 
