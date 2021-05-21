@@ -97,8 +97,8 @@ def addInfo(analyzer,line):
     mp.put(analyzer['landingpoints'],line['landing_point_id'],line)
 
 def addCountry(analyzer,line):
-    mp.put(analyzer['countries'],line['CountryName'],line)
-
+    mp.put(analyzer['countries'],line['CapitalName'],line)
+    addPoint(analyzer,line['CapitalName'])
 def addConnection(analyzer):
     vertices=gr.vertices(analyzer['connections'])
     a=lit.newIterator(vertices)
@@ -115,8 +115,26 @@ def addConnection(analyzer):
 def addCapital(analyzer):
     for capital in analyzer['countries']['table']['elements']:
         cap=mp.get(analyzer['countries'], capital)
-        loc1
+        mini=0
+        dist=0
+        landes
+        loc1=(cap['CapitalLatitude'],cap['CapitalLongitude'])
         for landingp in analyzer['landingpoints']['table']['elements']:
+            land=mp.get(analyzer['countries'], capital)
+            loc1=(land['latitude'],land['longitude'])
+            dist=hs.haversine(loc1,loc2)
+            if dist>mini:
+                mini=dist
+                landes=land['landing_point_id']
+        vertices=gr.vertices(analyzer['connections'])
+        a=lit.newIterator(vertices)
+        while lit.hasNext(a):
+            c=lit.next(a)
+            h=c.split("-")
+            if h[0]==landes:
+                    addLine(analyzer,mini,cap['CapitalName'],c)
+
+
 
 
 
