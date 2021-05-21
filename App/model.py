@@ -102,7 +102,6 @@ def addCountry(analyzer,line):
 def addConnection(analyzer):
     vertices=gr.vertices(analyzer['connections'])
     a=lit.newIterator(vertices)
-  
     while lit.hasNext(a):
         c=lit.next(a)
         b=lit.newIterator(vertices)
@@ -113,7 +112,11 @@ def addConnection(analyzer):
                 j=d.split("-")
                 if h[0]==j[0]:
                     addLine(analyzer,100,c,d)
-            
+def addCapital(analyzer):
+    for capital in analyzer['countries']['table']['elements']:
+        cap=mp.get(analyzer['countries'], capital)
+        loc1
+        for landingp in analyzer['landingpoints']['table']['elements']:
 
 
 
