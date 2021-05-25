@@ -92,6 +92,7 @@ def loadServices(analyzer):
     for line in input_file:
         model.addCountry(analyzer,line)
     model.addConnection(analyzer)
+    model.addCapital(analyzer)
     return analyzer
 
 

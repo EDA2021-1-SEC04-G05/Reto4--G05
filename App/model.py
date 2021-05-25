@@ -113,29 +113,31 @@ def addConnection(analyzer):
                 if h[0]==j[0]:
                     addLine(analyzer,100,c,d)
 def addCapital(analyzer):
-    for capital in analyzer['countries']['table']['elements']:
-        cap=mp.get(analyzer['countries'], capital)
-        mini=0
-        dist=0
-        landes
-        loc1=(cap['CapitalLatitude'],cap['CapitalLongitude'])
-        for landingp in analyzer['landingpoints']['table']['elements']:
-            land=mp.get(analyzer['countries'], capital)
-            loc1=(land['latitude'],land['longitude'])
-            dist=hs.haversine(loc1,loc2)
-            if dist>mini:
-                mini=dist
-                landes=land['landing_point_id']
-        vertices=gr.vertices(analyzer['connections'])
-        a=lit.newIterator(vertices)
-        while lit.hasNext(a):
-            c=lit.next(a)
-            h=c.split("-")
-            if h[0]==landes:
-                    addLine(analyzer,mini,cap['CapitalName'],c)
-
-
-
+    for capital in (analyzer['countries']['table']['elements']):
+        while capital['key']!=None:
+            
+            cap=mp.get(analyzer['countries'], capital['key'])
+            cap=cap['value']
+            mini=100000000000
+            dist=0
+            landes=" "
+            loc1=(float(cap['CapitalLatitude']),float(cap['CapitalLongitude']))
+            for landingp in analyzer['landingpoints']['table']['elements']:
+                while landingp['key']!=None:
+                    land=mp.get(analyzer['landingpoints'], landingp['key'])
+                    land=land['value']
+                    loc2=(float(land['latitude']),float(land['longitude']))
+                    dist=hs.haversine(loc1,loc2)
+                    if dist<mini:
+                        mini=dist
+                        landes=land['landing_point_id']
+                vertices=gr.vertices(analyzer['connections'])
+                a=lit.newIterator(vertices)
+                while lit.hasNext(a):
+                    c=lit.next(a)
+                    h=c.split("-")
+                    if h[0]==landes:
+                            addLine(analyzer,mini,cap['CapitalName'],c)
 
 
 
@@ -145,7 +147,8 @@ def addCapital(analyzer):
 # ==============================
 # Funciones de consulta
 # ==============================
-
+def Clusters(analyzer):
+    h=1
 
 # Funciones para creacion de datos
 
