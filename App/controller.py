@@ -91,15 +91,20 @@ def loadServices(analyzer):
     lastservice = None
     for line in input_file:
         model.addCountry(analyzer,line)
+    #print("hola")
     model.addConnection(analyzer)
+    #print('adios')
     model.addCapital(analyzer)
+    #print('ya')
     return analyzer
 
 
 # ___________________________________________________
 #  Funciones para consultas
 # ___________________________________________________
-
+def Clusters(analyzer,l1,l2):
+    ans=model.Clusters(analyzer, l1, l2)
+    return ans
 
 # Inicialización del Catálogo de libros
 

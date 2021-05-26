@@ -34,7 +34,8 @@ from DISClib.DataStructures import graphstructure as gr
 assert cf
 from DISClib.DataStructures import listiterator as lit
 import haversine as hs
-
+from DISClib.Algorithms.Graphs import dijsktra as dij
+from DISClib.Algorithms.Graphs import scc 
 """
 Se define la estructura de un catálogo de videos. El catálogo tendrá dos listas, una para los videos, otra para las categorias de
 los mismos.
@@ -62,7 +63,7 @@ def newAnalyzer():
 
     analyzer['connections'] = gr.newGraph(datastructure='ADJ_LIST',
                                               directed=True,
-                                              size=14000,
+                                              size=140000,
                                               comparefunction=compareIds)
     return analyzer
 
@@ -97,8 +98,8 @@ def addInfo(analyzer,line):
     mp.put(analyzer['landingpoints'],line['landing_point_id'],line)
 
 def addCountry(analyzer,line):
-    mp.put(analyzer['countries'],line['CapitalName'],line)
-    addPoint(analyzer,line['CapitalName'])
+    mp.put(analyzer['countries'],line['CountryName'],line)
+
 def addConnection(analyzer):
     vertices=gr.vertices(analyzer['connections'])
     a=lit.newIterator(vertices)
@@ -113,17 +114,19 @@ def addConnection(analyzer):
                 if h[0]==j[0]:
                     addLine(analyzer,100,c,d)
 def addCapital(analyzer):
+    #print("Capital")
+    Lista=lt.newList()
     for capital in (analyzer['countries']['table']['elements']):
-        while capital['key']!=None:
-            
+        if capital['key']!=None:
             cap=mp.get(analyzer['countries'], capital['key'])
             cap=cap['value']
+            addPoint(analyzer,cap['CapitalName'])
             mini=100000000000
             dist=0
             landes=" "
             loc1=(float(cap['CapitalLatitude']),float(cap['CapitalLongitude']))
-            for landingp in analyzer['landingpoints']['table']['elements']:
-                while landingp['key']!=None:
+            for landingp in (analyzer['landingpoints']['table']['elements']):
+                if landingp['key']!=None and landingp['key'] not in Lista:
                     land=mp.get(analyzer['landingpoints'], landingp['key'])
                     land=land['value']
                     loc2=(float(land['latitude']),float(land['longitude']))
@@ -131,25 +134,73 @@ def addCapital(analyzer):
                     if dist<mini:
                         mini=dist
                         landes=land['landing_point_id']
-                vertices=gr.vertices(analyzer['connections'])
-                a=lit.newIterator(vertices)
-                while lit.hasNext(a):
-                    c=lit.next(a)
-                    h=c.split("-")
-                    if h[0]==landes:
-                            addLine(analyzer,mini,cap['CapitalName'],c)
-
-
-
-
-  
+            vertices=gr.vertices(analyzer['connections'])
+            a=lit.newIterator(vertices)
+            while lit.hasNext(a):
+                c=lit.next(a)
+                h=c.split("-")
+                #print(h)
+                #if h[0] not in Lista:
+                if h[0]==landes:
+                    #print(h[0],c)
+                    #print(h[0])
+                    addLine(analyzer,mini,cap['CapitalName'],c)
+                   # print(capital['key'],c)
+            lt.addLast(Lista, landes)
+                
+            #print('va uno')
 
 # ==============================
 # Funciones de consulta
 # ==============================
-def Clusters(analyzer):
-    h=1
+def Clusters(analyzer,l1,l2):
+    estructura=scc.KosarajuSCC(analyzer['connections'])
+    idscc=estructura['idscc']
+    numero=scc.connectedComponents(estructura)
+    land1=lt.newList()
+    land2=lt.newList()
+    vertices=gr.vertices(analyzer['connections'])
+    a=lit.newIterator(vertices)
+    answer=False
+    while lit.hasNext(a):
+        c=lit.next(a)
+        h=c.split("-")
+                #print(h)
+                #if h[0] not in Lista:
+        if h[0]==l1:
+            lt.addLast(land1, c)
+        if h[0]==l2:
+            lt.addLast(land2, c)
+    la1=lit.newIterator(land1)
+    while lit.hasNext(la1):
+        b=lit.next(la1)
+        entry=mp.get(idscc,b)
+        cluster=me.getValue(entry)
+        la2=lit.newIterator(land1)
+        while lit.hasNext(la2):
+            c=lit.next(la2)
+            entry=mp.get(idscc,c)
+            cluster1=me.getValue(entry)
+            if cluster1==cluster:
+                answer=True
+                return (answer,numero)
+    return (answer,numero)
+def distPaises (analyzer,paisA,paisB):
+    pA=mp.get(analyzer['countries'],paisA)
+    route=dij.Dijkstra(analyzer['connections'], pA['CapitalName'])
+    pB=mp.get(analyzer['countries'],paisB)
+    #route=dij.Dijkstra(analyzer['connections'], pB['CapitalName'])
+    path=dij.hasPathTo(route, pB['CapitalNames'])
+    if path==True:
+        dist=dij.distTo(route, pB['CapitalNames'])
+    #has path to 
+    #dist to 
+    #path to 
 
+
+
+        
+    
 # Funciones para creacion de datos
 
 # Funciones de consulta
