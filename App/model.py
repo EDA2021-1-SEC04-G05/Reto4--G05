@@ -193,6 +193,9 @@ def distPaises (analyzer,paisA,paisB):
     path=dij.hasPathTo(route, pB['CapitalNames'])
     if path==True:
         dist=dij.distTo(route, pB['CapitalNames'])
+        path=dij.pathTo(route, pB['CapitalNames'])
+    return (dist,path)
+
     #has path to 
     #dist to 
     #path to 
