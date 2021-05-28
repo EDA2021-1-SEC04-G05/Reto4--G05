@@ -82,6 +82,17 @@ while True:
             r="no"
         print("Los landingpoints {0} y {1} {2} son del mismo cluster ".format(l1,l2,r))
         print("EL total de clusters es de" + str(result[1]))
+    elif int(inputs[0]) == 1:
+        paisA=input("ingrese primer landing point:")
+        paisB=input("ingrese segundo landing point:")
+        result=controller.distPaises(analyzer, paisA, paisB)
+        print(result)
+       # if result[0]==True:
+        #    r="si"
+        #else:
+            #r="no"
+        #print("Los landingpoints {0} y {1} {2} son del mismo cluster ".format(l1,l2,r))
+        #print("EL total de clusters es de" + str(result[1]))
     else:
         sys.exit(0)
 sys.exit(0)

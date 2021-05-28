@@ -105,7 +105,9 @@ def loadServices(analyzer):
 def Clusters(analyzer,l1,l2):
     ans=model.Clusters(analyzer, l1, l2)
     return ans
-
+def distPaises (analyzer,paisA,paisB):
+    ans=model.distPaises(analyzer, paisA, paisB)
+    return
 # Inicialización del Catálogo de libros
 
 # Funciones para la carga de datos
