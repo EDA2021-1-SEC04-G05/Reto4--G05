@@ -23,6 +23,8 @@
 import config as cf
 import model
 import csv
+import time
+import tracemalloc
 
 
 """
@@ -67,8 +69,14 @@ def loadServices(analyzer):
     addRouteConnection crea conexiones entre diferentes rutas
     servidas en una misma estación.
     """
+    """
+    delta_time = -1.0
+    delta_memory = -1.0
 
-    
+    tracemalloc.start()
+    start_time = getTime()
+    start_memory = getMemory()
+    """
 
     servicefile='connections.csv'
     servicesfile = cf.data_dir + servicefile
@@ -91,11 +99,18 @@ def loadServices(analyzer):
     lastservice = None
     for line in input_file:
         model.addCountry(analyzer,line)
-    #print("hola")
+    print("hola")
     model.addConnection(analyzer)
-    #print('adios')
+    print('adios')
     model.addCapital(analyzer)
-    #print('ya')
+    print('ya')
+    """
+    stop_memory = getMemory()
+    stop_time = getTime()
+    tracemalloc.stop()
+    delta_time = stop_time - start_time
+    delta_memory = deltaMemory(start_memory, stop_memory)
+    return (analyzer,delta_time, delta_memory)"""
     return analyzer
 
 
@@ -107,7 +122,7 @@ def Clusters(analyzer,l1,l2):
     return ans
 def distPaises (analyzer,paisA,paisB):
     ans=model.distPaises(analyzer, paisA, paisB)
-    return
+    return ans
 # Inicialización del Catálogo de libros
 
 # Funciones para la carga de datos
@@ -115,3 +130,7 @@ def distPaises (analyzer,paisA,paisB):
 # Funciones de ordenamiento
 
 # Funciones de consulta sobre el catálogo
+
+
+
+#funciones para medir 

@@ -36,10 +36,12 @@ from DISClib.DataStructures import listiterator as lit
 import haversine as hs
 from DISClib.Algorithms.Graphs import dijsktra as dij
 from DISClib.Algorithms.Graphs import scc 
+import sys
 """
 Se define la estructura de un catálogo de videos. El catálogo tendrá dos listas, una para los videos, otra para las categorias de
 los mismos.
 """
+sys.setrecursionlimit(999999)
 
 # Construccion de modelos
 def newAnalyzer():
@@ -54,7 +56,9 @@ def newAnalyzer():
     analyzer = {
                     'landingpoints': None,
                     'connections': None,
-                    'countries': None}
+                    'countries': None,
+                    'cont':0,
+                    'list':" "}
 
     analyzer['landingpoints'] = mp.newMap(maptype='PROBING',
                                      comparefunction=compareIds)
@@ -65,24 +69,47 @@ def newAnalyzer():
                                               directed=True,
                                               size=140000,
                                               comparefunction=compareIds)
+    analyzer['list']=lt.newList()
     return analyzer
 
 
 # Funciones para agregar informacion al catalogo
-def addLanding(analyzer,line):
-    origin=line['\ufefforigin']
-    cable_id=line['cable_id']
-    lableo=origin+"-"+cable_id
-    destination=line['destination']
-    labled=destination+"-"+cable_id
-    length=line['cable_length']
 
-    if length!='n.a.':
-        length=length.strip(" km").replace(",", "")
-        length=float(length)
-    addPoint(analyzer,lableo)
-    addPoint(analyzer,labled)
-    addLine(analyzer,length,lableo,labled)
+def addLanding(analyzer,line):
+    a=lt.isEmpty(analyzer['list'])
+    if a==True:
+        origin=line['\ufefforigin']
+        cable_id=line['cable_id']
+        lableo=origin+"-"+cable_id
+        addPoint(analyzer, lableo)
+
+        length=line['cable_length']
+        if length!='n.a.':
+            length=length.strip(" km").replace(",", "")
+            length=float(length)
+        else:
+            length=0.1
+        lt.addFirst(analyzer['list'], (lableo,length))
+
+    else:
+        #origin=line['\ufefforigin']
+        cable_id=line['cable_id']
+        last=lt.getElement(analyzer['list'], lt.size(analyzer['list']))
+        lableo=last[0]
+        lengthl=last[1]
+        destination=line['\ufefforigin']
+        labled=destination+"-"+cable_id
+        length=line['cable_length']
+
+        if length!='n.a.':
+            length=length.strip(" km").replace(",", "")
+            length=float(length)
+        else:
+            length=0
+        #addPoint(analyzer,lableo)
+        addPoint(analyzer,labled)
+        addLine(analyzer,lengthl,lableo,labled)
+        lt.addLast(analyzer['list'], (labled,length))
 
 
 def addPoint(analyzer,lable):
@@ -99,6 +126,7 @@ def addInfo(analyzer,line):
 
 def addCountry(analyzer,line):
     mp.put(analyzer['countries'],line['CountryName'],line)
+    addPoint(analyzer,line['CapitalName'])
 
 def addConnection(analyzer):
     vertices=gr.vertices(analyzer['connections'])
@@ -120,7 +148,6 @@ def addCapital(analyzer):
         if capital['key']!=None:
             cap=mp.get(analyzer['countries'], capital['key'])
             cap=cap['value']
-            addPoint(analyzer,cap['CapitalName'])
             mini=100000000000
             dist=0
             landes=" "
@@ -145,7 +172,8 @@ def addCapital(analyzer):
                     #print(h[0],c)
                     #print(h[0])
                     addLine(analyzer,mini,cap['CapitalName'],c)
-                   # print(capital['key'],c)
+                    
+                    #print(cap['CapitalName'],c)
             lt.addLast(Lista, landes)
                 
             #print('va uno')
@@ -156,6 +184,7 @@ def addCapital(analyzer):
 def Clusters(analyzer,l1,l2):
     estructura=scc.KosarajuSCC(analyzer['connections'])
     idscc=estructura['idscc']
+    print(idscc)
     numero=scc.connectedComponents(estructura)
     land1=lt.newList()
     land2=lt.newList()
@@ -176,25 +205,80 @@ def Clusters(analyzer,l1,l2):
         b=lit.next(la1)
         entry=mp.get(idscc,b)
         cluster=me.getValue(entry)
-        la2=lit.newIterator(land1)
+        #print(cluster)
+        la2=lit.newIterator(land2)
         while lit.hasNext(la2):
             c=lit.next(la2)
             entry=mp.get(idscc,c)
             cluster1=me.getValue(entry)
             if cluster1==cluster:
+                #print(cluster1)
                 answer=True
                 return (answer,numero)
     return (answer,numero)
+
 def distPaises (analyzer,paisA,paisB):
     pA=mp.get(analyzer['countries'],paisA)
-    route=dij.Dijkstra(analyzer['connections'], pA['CapitalName'])
+    pA=pA['value']
+    print(pA)
+    minin=1000000
+    loc1=(float(pA['CapitalLatitude']),float(pA['CapitalLongitude']))
+    for landingp in (analyzer['landingpoints']['table']['elements']):
+        if landingp['key']!=None:
+            land=mp.get(analyzer['landingpoints'], landingp['key'])
+            land=land['value']
+            loc2=(float(land['latitude']),float(land['longitude']))
+            dist=hs.haversine(loc1,loc2)
+            if dist<minin:
+                minin=dist
+                landeA=land['landing_point_id']
+    route=dij.Dijkstra(analyzer['connections'], landeA)
+    #xsprint(route)
+    
     pB=mp.get(analyzer['countries'],paisB)
+    pB=pB['value']
+    print(pB)
+    Lista=lt.newList()
+    dist=0
+    mini=10000000
+    loc1=(float(pB['CapitalLatitude']),float(pB['CapitalLongitude']))
+    for landingp in (analyzer['landingpoints']['table']['elements']):
+         if landingp['key']!=None:
+            land=mp.get(analyzer['landingpoints'], landingp['key'])
+            land=land['value']
+            loc2=(float(land['latitude']),float(land['longitude']))
+            dist=hs.haversine(loc1,loc2)
+            if dist<mini:
+                mini=dist
+                landes=land['landing_point_id']
+    vertices=gr.vertices(analyzer['connections'])
+    a=lit.newIterator(vertices)
+    while lit.hasNext(a):
+        c=lit.next(a)
+        h=c.split("-")
+                #print(h)
+                #if h[0] not in Lista:
+        if h[0]==landes:
+                    #print(h[0],c)
+                    #print(h[0])
+            lt.addLast(Lista, c)
+    dist=-1
+    path="No"
+    disti=-1
+    pathh="No"
     #route=dij.Dijkstra(analyzer['connections'], pB['CapitalName'])
-    path=dij.hasPathTo(route, pB['CapitalNames'])
-    if path==True:
-        dist=dij.distTo(route, pB['CapitalNames'])
-        path=dij.pathTo(route, pB['CapitalNames'])
-    return (dist,path)
+    a=lit.newIterator(Lista)
+    while lit.hasNext(a):
+        e=lit.next(a)
+        path=dij.hasPathTo(route, e)
+        if path==True:
+            dist=dij.distTo(route, pB['CapitalName'])
+            path=dij.pathTo(route, pB['CapitalName'])
+            if path !=None:
+                pathh=path
+                disti=dist
+    return(pathh,disti)
+    
 
     #has path to 
     #dist to 
