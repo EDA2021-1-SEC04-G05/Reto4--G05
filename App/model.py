@@ -220,8 +220,8 @@ def Clusters(analyzer,l1,l2):
 def distPaises (analyzer,paisA,paisB):
     pA=mp.get(analyzer['countries'],paisA)
     pA=pA['value']
-    print(pA)
     minin=1000000
+    listi=lt.newList()
     loc1=(float(pA['CapitalLatitude']),float(pA['CapitalLongitude']))
     for landingp in (analyzer['landingpoints']['table']['elements']):
         if landingp['key']!=None:
@@ -232,12 +232,12 @@ def distPaises (analyzer,paisA,paisB):
             if dist<minin:
                 minin=dist
                 landeA=land['landing_point_id']
-    route=dij.Dijkstra(analyzer['connections'], landeA)
+               #print(landeA)
+
     #xsprint(route)
     
     pB=mp.get(analyzer['countries'],paisB)
     pB=pB['value']
-    print(pB)
     Lista=lt.newList()
     dist=0
     mini=10000000
@@ -262,22 +262,31 @@ def distPaises (analyzer,paisA,paisB):
                     #print(h[0],c)
                     #print(h[0])
             lt.addLast(Lista, c)
-    dist=-1
+            
+        if h[0]==landeA:
+                    #print(h[0],c)
+                    #print(h[0])
+            x=c 
+            lt.addLast(listi, c)
+            dist=-1
     path="No"
-    disti=-1
+    disti=1000000000000000
     pathh="No"
+    t=lit.newIterator(listi)
+    while lit.hasNext(t):
+        y=lit.next(t)
+        route=dij.Dijkstra(analyzer['connections'],y)
     #route=dij.Dijkstra(analyzer['connections'], pB['CapitalName'])
-    a=lit.newIterator(Lista)
-    while lit.hasNext(a):
-        e=lit.next(a)
-        path=dij.hasPathTo(route, e)
-        if path==True:
-            dist=dij.distTo(route, pB['CapitalName'])
-            path=dij.pathTo(route, pB['CapitalName'])
-            if path !=None:
-                pathh=path
-                disti=dist
-    return(pathh,disti)
+        a=lit.newIterator(Lista)
+        while lit.hasNext(a):
+            e=lit.next(a)
+            paath=dij.hasPathTo(route, e)
+            if path==True:
+                dist=dij.distTo(route, e)
+                path=dij.pathTo(route, e)
+                if path !=None and dist<disti: 
+                    disti=dist
+    return(path,disti)
     
 
     #has path to 
