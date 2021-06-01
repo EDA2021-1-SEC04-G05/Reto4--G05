@@ -99,11 +99,11 @@ def loadServices(analyzer):
     lastservice = None
     for line in input_file:
         model.addCountry(analyzer,line)
-    print("hola")
+    print("1")
     model.addConnection(analyzer)
-    print('adios')
+    print('2')
     model.addCapital(analyzer)
-    print('ya')
+    print('3')
     """
     stop_memory = getMemory()
     stop_time = getTime()

@@ -154,8 +154,7 @@ def addCapital(analyzer):
             loc1=(float(cap['CapitalLatitude']),float(cap['CapitalLongitude']))
             for landingp in (analyzer['landingpoints']['table']['elements']):
                 if landingp['key']!=None and landingp['key'] not in Lista:
-                    land=mp.get(analyzer['landingpoints'], landingp['key'])
-                    land=land['value']
+                    land=me.getValue(mp.get(analyzer['landingpoints'], landingp['key']))
                     loc2=(float(land['latitude']),float(land['longitude']))
                     dist=hs.haversine(loc1,loc2)
                     if dist<mini:
@@ -172,7 +171,6 @@ def addCapital(analyzer):
                     #print(h[0],c)
                     #print(h[0])
                     addLine(analyzer,mini,cap['CapitalName'],c)
-                    
                     #print(cap['CapitalName'],c)
             lt.addLast(Lista, landes)
                 
@@ -218,34 +216,26 @@ def Clusters(analyzer,l1,l2):
     return (answer,numero)
 
 def distPaises (analyzer,paisA,paisB):
-    pA=mp.get(analyzer['countries'],paisA)
-    pA=pA['value']
+    pA=me.getValue(mp.get(analyzer['countries'],paisA))
     minin=1000000
     listi=lt.newList()
     loc1=(float(pA['CapitalLatitude']),float(pA['CapitalLongitude']))
     for landingp in (analyzer['landingpoints']['table']['elements']):
         if landingp['key']!=None:
-            land=mp.get(analyzer['landingpoints'], landingp['key'])
-            land=land['value']
+            land=me.getValue(mp.get(analyzer['landingpoints'], landingp['key']))
             loc2=(float(land['latitude']),float(land['longitude']))
             dist=hs.haversine(loc1,loc2)
             if dist<minin:
                 minin=dist
                 landeA=land['landing_point_id']
-               #print(landeA)
-
-    #xsprint(route)
-    
-    pB=mp.get(analyzer['countries'],paisB)
-    pB=pB['value']
+    pB=me.getValue(mp.get(analyzer['countries'],paisB))
     Lista=lt.newList()
     dist=0
     mini=10000000
     loc1=(float(pB['CapitalLatitude']),float(pB['CapitalLongitude']))
     for landingp in (analyzer['landingpoints']['table']['elements']):
          if landingp['key']!=None:
-            land=mp.get(analyzer['landingpoints'], landingp['key'])
-            land=land['value']
+            land=me.getValue(mp.get(analyzer['landingpoints'], landingp['key']))
             loc2=(float(land['latitude']),float(land['longitude']))
             dist=hs.haversine(loc1,loc2)
             if dist<mini:
@@ -256,19 +246,12 @@ def distPaises (analyzer,paisA,paisB):
     while lit.hasNext(a):
         c=lit.next(a)
         h=c.split("-")
-                #print(h)
-                #if h[0] not in Lista:
         if h[0]==landes:
-                    #print(h[0],c)
-                    #print(h[0])
             lt.addLast(Lista, c)
-            
         if h[0]==landeA:
-                    #print(h[0],c)
-                    #print(h[0])
             x=c 
             lt.addLast(listi, c)
-            dist=-1
+    dist=-1
     path="No"
     disti=1000000000000000
     pathh="No"
@@ -276,22 +259,17 @@ def distPaises (analyzer,paisA,paisB):
     while lit.hasNext(t):
         y=lit.next(t)
         route=dij.Dijkstra(analyzer['connections'],y)
-    #route=dij.Dijkstra(analyzer['connections'], pB['CapitalName'])
         a=lit.newIterator(Lista)
         while lit.hasNext(a):
             e=lit.next(a)
-            paath=dij.hasPathTo(route, e)
+            path=dij.hasPathTo(route, e)
             if path==True:
                 dist=dij.distTo(route, e)
                 path=dij.pathTo(route, e)
                 if path !=None and dist<disti: 
                     disti=dist
     return(path,disti)
-    
-
-    #has path to 
-    #dist to 
-    #path to 
+def 
 
 
 

@@ -27,6 +27,7 @@ from DISClib.ADT import list as lt
 assert cf
 from DISClib.DataStructures import graphstructure as gr
 from DISClib.ADT import map as mp
+from DISClib.DataStructures import listiterator as lit
 
 
 """
@@ -86,7 +87,12 @@ while True:
         paisA=input("ingrese primer pais:")
         paisB=input("ingrese segundo pais:")
         result=controller.distPaises(analyzer, paisA, paisB)
-        print(result)
+        number=result[1]
+        a=lit.newIterator(result[0])
+        while lit.hasNext(a):
+            e=lit.next(a)
+            print("from " + str(e['vertexA'])+ " to "+str(e['vertexA'])+ " in " + str(e['weight']) )
+        print("The total distances is" + str(number))
        # if result[0]==True:
         #    r="si"
         #else:
