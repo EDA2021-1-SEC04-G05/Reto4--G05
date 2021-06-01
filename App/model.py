@@ -58,7 +58,8 @@ def newAnalyzer():
                     'connections': None,
                     'countries': None,
                     'cont':0,
-                    'list':" "}
+                    'list':" ",
+                    'names':None}
 
     analyzer['landingpoints'] = mp.newMap(maptype='PROBING',
                                      comparefunction=compareIds)
@@ -67,9 +68,11 @@ def newAnalyzer():
 
     analyzer['connections'] = gr.newGraph(datastructure='ADJ_LIST',
                                               directed=True,
-                                              size=140000,
+                                              size=14000,
                                               comparefunction=compareIds)
     analyzer['list']=lt.newList()
+    analyzer['names'] = mp.newMap(maptype='PROBING',
+                                     comparefunction=compareNames)
     return analyzer
 
 
@@ -90,6 +93,7 @@ def addLanding(analyzer,line):
         else:
             length=0.1
         lt.addFirst(analyzer['list'], (lableo,length))
+        mp.put(analyzer['names'], line['name'], lableo)
 
     else:
         #origin=line['\ufefforigin']
@@ -110,6 +114,7 @@ def addLanding(analyzer,line):
         addPoint(analyzer,labled)
         addLine(analyzer,lengthl,lableo,labled)
         lt.addLast(analyzer['list'], (labled,length))
+        mp.put(analyzer['names'], line['name'], lableo)
 
 
 def addPoint(analyzer,lable):
@@ -146,8 +151,7 @@ def addCapital(analyzer):
     Lista=lt.newList()
     for capital in (analyzer['countries']['table']['elements']):
         if capital['key']!=None:
-            cap=mp.get(analyzer['countries'], capital['key'])
-            cap=cap['value']
+            cap=me.getValue(mp.get(analyzer['countries'], capital['key']))
             mini=100000000000
             dist=0
             landes=" "
@@ -171,6 +175,7 @@ def addCapital(analyzer):
                     #print(h[0],c)
                     #print(h[0])
                     addLine(analyzer,mini,cap['CapitalName'],c)
+                    #
                     #print(cap['CapitalName'],c)
             lt.addLast(Lista, landes)
                 
@@ -269,7 +274,25 @@ def distPaises (analyzer,paisA,paisB):
                 if path !=None and dist<disti: 
                     disti=dist
     return(path,disti)
-def 
+
+def fallas(analyzer,vertice):
+    print(vertice)
+    Lista=lt.newList()
+    edges=gr.adjacents(analyzer['connections'], vertice)
+    b=lit.newIterator(edges)
+    while lit.hasNext(b):
+        c=lit.next(b)
+        loc1=(float(c['latitude']),float(c['Longitude']))
+        for country in (analyzer['countries']['table']['elements']):
+            if country['key']!=None:
+                land=me.getValue(mp.get(analyzer['countries'], landingp['key']))
+                loc2=(float(land['CapitalLatitude']),float(land['CapitalLongitude']))
+                dist=hs.haversine(loc1,loc2)
+                if dist<minin:
+                    minin=dist
+                    landeA=land['CountryName']
+        lt.addLast(Lista, landeaA)  
+    return Lista
 
 
 

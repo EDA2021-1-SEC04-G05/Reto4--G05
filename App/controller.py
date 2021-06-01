@@ -123,6 +123,9 @@ def Clusters(analyzer,l1,l2):
 def distPaises (analyzer,paisA,paisB):
     ans=model.distPaises(analyzer, paisA, paisB)
     return ans
+def Fallas (analyzer,vertice):
+    ans=model.fallas(analyzer, vertice)
+    return ans
 # Inicialización del Catálogo de libros
 
 # Funciones para la carga de datos

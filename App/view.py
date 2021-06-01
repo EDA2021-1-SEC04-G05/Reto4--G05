@@ -49,7 +49,7 @@ def printMenu():
     print("7- La mejor ruta para comunicarme")
     print("8- Graficar los Grafos")
 
-catalog = None
+
 
 """
 Menu principal
@@ -99,6 +99,10 @@ while True:
             #r="no"
         #print("Los landingpoints {0} y {1} {2} son del mismo cluster ".format(l1,l2,r))
         #print("EL total de clusters es de" + str(result[1]))
+    elif int(inputs[0]) == 3:
+        paisA=input("ingrese el nombre del landingpoint completo")
+        result=controller.Fallas(analyzer, paisA)
+        print(result)
     else:
         sys.exit(0)
 sys.exit(0)
