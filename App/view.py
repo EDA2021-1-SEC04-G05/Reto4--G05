@@ -99,7 +99,7 @@ while True:
             #r="no"
         #print("Los landingpoints {0} y {1} {2} son del mismo cluster ".format(l1,l2,r))
         #print("EL total de clusters es de" + str(result[1]))
-    elif int(inputs[0]) == 3:
+    elif int(inputs[0]) == 6:
         paisA=input("ingrese el nombre del landingpoint completo")
         result=controller.Fallas(analyzer, paisA)
         print(result)

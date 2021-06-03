@@ -278,7 +278,17 @@ def distPaises (analyzer,paisA,paisB):
 def fallas(analyzer,vertice):
     print(vertice)
     Lista=lt.newList()
+    listi=lt.newList()
+    
+    #recorrer map con los landing points y decir que si vertice == [name:] entonces name=l[name]
     edges=gr.adjacents(analyzer['connections'], vertice)
+    b=lit.newIterator(edges)
+    while lit.hasNext(b):
+        c=lit.next(b)
+        h=c.split("-")
+        if h[0]==vertice:
+            lt.addLast(listi, c)
+        
     b=lit.newIterator(edges)
     while lit.hasNext(b):
         c=lit.next(b)
