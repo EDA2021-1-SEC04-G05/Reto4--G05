@@ -27,7 +27,7 @@ from DISClib.ADT import list as lt
 assert cf
 from DISClib.DataStructures import graphstructure as gr
 from DISClib.ADT import map as mp
-from DISClib.DataStructures import listiterator as lit
+from DISClib.DataStructures import linkedlistiterator as lit
 
 
 """

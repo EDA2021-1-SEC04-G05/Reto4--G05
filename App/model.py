@@ -32,7 +32,7 @@ from DISClib.DataStructures import mapentry as me
 from DISClib.Algorithms.Sorting import shellsort as sa
 from DISClib.DataStructures import graphstructure as gr
 assert cf
-from DISClib.DataStructures import listiterator as lit
+from DISClib.DataStructures import linkedlistiterator as lit
 import haversine as hs
 from DISClib.Algorithms.Graphs import dijsktra as dij
 from DISClib.Algorithms.Graphs import scc 
