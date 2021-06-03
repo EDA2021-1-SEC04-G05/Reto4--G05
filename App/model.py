@@ -93,7 +93,7 @@ def addLanding(analyzer,line):
         else:
             length=0.1
         lt.addFirst(analyzer['list'], (lableo,length))
-        mp.put(analyzer['names'], line['name'], lableo)
+        #mp.put(analyzer['names'], line['name'], lableo)
 
     else:
         #origin=line['\ufefforigin']
@@ -114,7 +114,7 @@ def addLanding(analyzer,line):
         addPoint(analyzer,labled)
         addLine(analyzer,lengthl,lableo,labled)
         lt.addLast(analyzer['list'], (labled,length))
-        mp.put(analyzer['names'], line['name'], lableo)
+        #mp.put(analyzer['names'], line['name'], lableo)
 
 
 def addPoint(analyzer,lable):
