@@ -281,30 +281,16 @@ def fallas(analyzer,vertice):
     
     #recorrer map con los landing points y decir que si vertice == [name:] entonces name=l[name]
 
-    edges=gr.adjacents(analyzer['connections'], vertice)
+    
     vertices=gr.vertices(analyzer['connections'])
-    b=lit.newIterator(edges)
+    b=lit.newIterator(vertices)
     while lit.hasNext(b):
         c=lit.next(b)
         h=c.split("-")
         if h[1]==vertice:
-            lt.addLast(listi, c)
+            name=c
     print("hola")
-
-    """
-    b=lit.newIterator(edges)
-    while lit.hasNext(b):
-        c=lit.next(b)
-        h=c.split("-")
-        if h[1]==vertice:
-            lt.addLast(listi, c)
-    for capital in (analyzer['landingpoints']['table']['elements']):
-        if landingp['key']!=None:
-            land=me.getValue(mp.get(analyzer['landingpoints'], landingp['key']))
-            if landingp['key']==vertice:
-                name=land['landingpoints']
-    """
-
+    edges=gr.adjacents(analyzer['connections'], c)
 
     b=lit.newIterator(edges)
     while lit.hasNext(b):
