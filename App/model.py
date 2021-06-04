@@ -58,8 +58,7 @@ def newAnalyzer():
                     'connections': None,
                     'countries': None,
                     'cont':0,
-                    'list':" ",
-                    'names':None}
+                    'list':" "}
 
     analyzer['landingpoints'] = mp.newMap(maptype='PROBING',
                                      comparefunction=compareIds)
@@ -71,8 +70,6 @@ def newAnalyzer():
                                               size=14000,
                                               comparefunction=compareIds)
     analyzer['list']=lt.newList()
-    analyzer['names'] = mp.newMap(maptype='PROBING',
-                                     comparefunction=compareNames)
     return analyzer
 
 
@@ -128,6 +125,8 @@ def addLine(analyzer,length,origin,destination):
 
 def addInfo(analyzer,line):
     mp.put(analyzer['landingpoints'],line['landing_point_id'],line)
+    lable=line['landing_point_id']+"-"+line['name']
+    addPoint(analyzer,lable)
 
 def addCountry(analyzer,line):
     mp.put(analyzer['countries'],line['CountryName'],line)
@@ -281,14 +280,32 @@ def fallas(analyzer,vertice):
     listi=lt.newList()
     
     #recorrer map con los landing points y decir que si vertice == [name:] entonces name=l[name]
+
     edges=gr.adjacents(analyzer['connections'], vertice)
+    vertices=gr.vertices(analyzer['connections'])
     b=lit.newIterator(edges)
     while lit.hasNext(b):
         c=lit.next(b)
         h=c.split("-")
-        if h[0]==vertice:
+        if h[1]==vertice:
             lt.addLast(listi, c)
-        
+    print("hola")
+
+    """
+    b=lit.newIterator(edges)
+    while lit.hasNext(b):
+        c=lit.next(b)
+        h=c.split("-")
+        if h[1]==vertice:
+            lt.addLast(listi, c)
+    for capital in (analyzer['landingpoints']['table']['elements']):
+        if landingp['key']!=None:
+            land=me.getValue(mp.get(analyzer['landingpoints'], landingp['key']))
+            if landingp['key']==vertice:
+                name=land['landingpoints']
+    """
+
+
     b=lit.newIterator(edges)
     while lit.hasNext(b):
         c=lit.next(b)
