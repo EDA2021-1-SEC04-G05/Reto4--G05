@@ -100,9 +100,24 @@ while True:
         #print("Los landingpoints {0} y {1} {2} son del mismo cluster ".format(l1,l2,r))
         #print("EL total de clusters es de" + str(result[1]))
     elif int(inputs[0]) == 5:
-        paisA=input("ingrese el nombre del landingpoint completo")
+        paisA=input("ingrese el nombre del landingpoint completo ")
         result=controller.Fallas(analyzer, paisA)
-        print(result)
+        lis=lt.newList()
+        a=lit.newIterator(result)
+        while lit.hasNext(a):
+            e=lit.next(a)
+            if e!=None:
+                b=lt.isPresent(lis, e)
+                if b==0:
+                    lt.addLast(lis, e)
+        print("El numero de paises afectados es:"+ str(lt.size(lis)))
+        print("Los paises afectados son:")
+        a=lit.newIterator(lis)
+        while lit.hasNext(a):
+            e=lit.next(a)
+            print(e)
+  
+        
     else:
         sys.exit(0)
 sys.exit(0)

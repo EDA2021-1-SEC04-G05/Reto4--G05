@@ -284,27 +284,37 @@ def fallas(analyzer,vertice):
     
     vertices=gr.vertices(analyzer['connections'])
     b=lit.newIterator(vertices)
-    while lit.hasNext(b):
+    name=" "
+    while lit.hasNext(b) and name== " ":
         c=lit.next(b)
-        h=c.split("-")
-        if h[1]==vertice:
-            name=c
-    print("hola")
-    edges=gr.adjacents(analyzer['connections'], c)
+        if "-" in c:
+            h=c.split("-")
+            if h[1]==vertice:
+                name=c
+                print("hola")
+    
+    edges=gr.adjacents(analyzer['connections'], name)
 
     b=lit.newIterator(edges)
     while lit.hasNext(b):
         c=lit.next(b)
-        loc1=(float(c['latitude']),float(c['Longitude']))
+        h=c.split("-")
+        p=me.getValue(mp.get(analyzer['landingpoints'],h[0]))
+        loc1=(float(p['latitude']),float(p['longitude']))
+        minin=100000000
+        landeA=0
         for country in (analyzer['countries']['table']['elements']):
+           
             if country['key']!=None:
-                land=me.getValue(mp.get(analyzer['countries'], landingp['key']))
+                land=me.getValue(mp.get(analyzer['countries'], country['key']))
                 loc2=(float(land['CapitalLatitude']),float(land['CapitalLongitude']))
                 dist=hs.haversine(loc1,loc2)
                 if dist<minin:
                     minin=dist
+                    print("si")
                     landeA=land['CountryName']
-        lt.addLast(Lista, landeaA)  
+        if landeA !=0:
+            lt.addLast(Lista, landeA)  
     return Lista
 
 
