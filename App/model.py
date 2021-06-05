@@ -186,7 +186,7 @@ def addCapital(analyzer):
 def Clusters(analyzer,l1,l2):
     estructura=scc.KosarajuSCC(analyzer['connections'])
     idscc=estructura['idscc']
-    print(idscc)
+    #print(idscc)
     numero=scc.connectedComponents(estructura)
     land1=lt.newList()
     land2=lt.newList()

@@ -76,7 +76,7 @@ while True:
         l1=input("ingrese primer landing point:")
         l2=input("ingrese segundo landing point:")
         result=controller.Clusters(analyzer, l1, l2)
-        print(result)
+        #print(result)
         if result[0]==True:
             r="si"
         else:
@@ -91,8 +91,8 @@ while True:
         a=lit.newIterator(result[0])
         while lit.hasNext(a):
             e=lit.next(a)
-            print("from " + str(e['vertexA'])+ " to "+str(e['vertexA'])+ " in " + str(e['weight']) )
-        print("The total distances is" + str(number))
+            print("from " + str(e['vertexA'])+ " to "+str(e['vertexB'])+ " in " + str(e['weight']) )
+        print("The total distances is " + str(number))
        # if result[0]==True:
         #    r="si"
         #else:
