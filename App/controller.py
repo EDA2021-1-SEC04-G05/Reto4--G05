@@ -120,12 +120,23 @@ def loadServices(analyzer):
 def Clusters(analyzer,l1,l2):
     ans=model.Clusters(analyzer, l1, l2)
     return ans
+
+def req2(analyzer):
+    ans=model.req2(analyzer)
+    return ans
+
 def distPaises (analyzer,paisA,paisB):
     ans=model.distPaises(analyzer, paisA, paisB)
     return ans
+    
+def req4(analyzer):
+    ans=model.req4(analyzer)
+    return ans
+
 def Fallas (analyzer,vertice):
     ans=model.fallas(analyzer, vertice)
     return ans
+
 # Inicialización del Catálogo de libros
 
 # Funciones para la carga de datos

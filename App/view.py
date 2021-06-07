@@ -83,6 +83,10 @@ while True:
             r="no"
         print("Los landingpoints {0} y {1} {2} son del mismo cluster ".format(l1,l2,r))
         print("EL total de clusters es de " + str(result[1]))
+    
+    elif int(inputs[0]) ==2:
+        result=controller.req2(analyzer)
+
     elif int(inputs[0]) == 3:
         paisA=input("ingrese primer pais:")
         paisB=input("ingrese segundo pais:")
@@ -99,6 +103,10 @@ while True:
             #r="no"
         #print("Los landingpoints {0} y {1} {2} son del mismo cluster ".format(l1,l2,r))
         #print("EL total de clusters es de" + str(result[1]))
+    
+    elif int(inputs[0] == 4):
+        result=controller.req4(analyzer)
+
     elif int(inputs[0]) == 5:
         paisA=input("ingrese el nombre del landingpoint completo ")
         result=controller.Fallas(analyzer, paisA)

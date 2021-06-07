@@ -26,11 +26,15 @@
 
 
 import config as cf
+import folium
+from DISClib.ADT import graph as gra
 from DISClib.ADT import list as lt
 from DISClib.ADT import map as mp
 from DISClib.DataStructures import mapentry as me
 from DISClib.Algorithms.Sorting import shellsort as sa
 from DISClib.DataStructures import graphstructure as gr
+from DISClib.DataStructures import adjlist as adj
+from DISClib.Algorithms.Graphs import prim as pr
 assert cf
 from DISClib.DataStructures import linkedlistiterator as lit
 import haversine as hs
@@ -219,6 +223,58 @@ def Clusters(analyzer,l1,l2):
                 return (answer,numero)
     return (answer,numero)
 
+def req2(analyzer):
+
+    maximo=0
+    #para manipular el mapa en formato html (mas que todo por si se hacen los bonos)
+    ma=folium.Map()
+    lis=lt.newList()
+    lista = mp.keySet(analyzer['landingpoints'])
+    for a in lt.iterator(lista):
+        cont=0
+        for b in lt.iterator(analyzer['list']):
+            c = b.split("*")
+            c = c[0]
+            if a==c:
+                x = adj.adjacents(analyzer['connections'], b):
+                numero=lt.size(x)
+                cont+= num
+        if cont > maximo:
+            maximo=cont
+            dato=x
+    dato1=mp.get(analyzer['landingpoints'],dato)
+    valor= me.getValue(dato1)
+    p1lat=float(valor['elements'][0]['latitude'])
+    p1lon=float(valor['elements'][0]['longitude'])
+    lp1(valor['elements'][0]['name'])
+    #se crea el folio con los datos 
+    folium.Marker(location=[p1lat,p1lon], popup=lp1).add_to(ma)
+
+    for a in lt.iterator(analyzer['list']):
+        b=x.split("*")
+        b=b[0]
+        if b==dato1:
+            x= adj.adjacents(analyzer['connections'], a)
+            for c in lt.iterator(x):
+                c=c.split("*")
+                c=c[0]
+                if mp.contains(analyzer['landingpoints'],c):
+                    dato2=mp.get(analyzer['landingpoints'],c)
+                    valor2=me.getValue(dato2)
+                p2lat=float(valor2['elemnts'][0]['latitude'])
+                p2lon=float(valor2['elements'][0]['longitude'])
+                lp2=(valor2['elements'][0]['name'])
+                folium.Marker(location=[p2lat,p2lon], popup=lp2).add_to(ma)
+                #Para que las lineas se añadan al folio como marcadores (necesita la ubicacion, peso y color)
+                al=folium.PolyLine(locations=[(p1lat,p1lon),(p2lat,p2lon)],weight=2,color = 'blue')
+                ma.add_child(al)
+
+            if lt.isPresent(lis,a)==0:
+                lt.addLast(lis,a)
+    print("Cables conectados: " +str(maximo))
+    print("Lista de landing points: " +str(lis))
+    return maximo, lis
+
 def distPaises (analyzer,paisA,paisB):
     pA=me.getValue(mp.get(analyzer['countries'],paisA))
     minin=1000000
@@ -273,6 +329,25 @@ def distPaises (analyzer,paisA,paisB):
                 if path !=None and dist<disti: 
                     disti=dist
     return(path,disti)
+
+def req4(analyzer):
+    vertex= gr.numVertices(analyzer['connections'])
+    arbol= pr.PrimMST(analyzer['connections'])
+    weight= pr.weightMST(analyzer['connections'],arbol)
+    branch= pr.edgesMST(analyzer['connections'],arbol)
+    branch= branch['edgeTo']['table']['elements']
+    maximo=0
+
+    for a in range(len(branch)):
+        valor= branch[a]['value']
+        if (valor != None) and (float(value['weight'])> max):
+            maximo = value['weight']
+    
+    print("Numero de nodos conectados a la red de expansión mínima: "+ str(vertex))
+    print("Costo total de la red de expansión mínima: "+ str(weight))
+    print("Rama más larga que hace parte de la red de expansión mínima: "+str(maximo))
+
+    return vertex,weight,maximo
 
 def fallas(analyzer,vertice):
     print(vertice)
